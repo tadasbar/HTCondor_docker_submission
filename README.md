@@ -1,7 +1,8 @@
 # How to submit a job to HTCondor from Kubernetes
 
 A special container that can submit HTC jobs must be used: https://gitlab.cern.ch/tbareiki/condorsubmit.
-A built container image from gitlab-registry will be used: gitlab-registry.cern.ch/tbareiki/condorsubmit
+
+A built container image from gitlab-registry will be used: gitlab-registry.cern.ch/tbareiki/condorsubmit.
 
 ## Gitlab credentials
 
@@ -15,7 +16,7 @@ kubectl create secret docker-registry gitlab-registry \
 ```
 
 The ACCESS-TOKEN can be retrieved from gitlab [access-tokens](https://gitlab.cern.ch/profile/personal_access_tokens)
-page with the **read_registry** ticked on. Also, the `--docker-username` has te be modified.
+page with the **read_registry** ticked on. Also, the `--docker-username` has to be modified.
 
 ## A pod that submits a job
 
@@ -89,8 +90,10 @@ spec:
           secretName: step1-sub
 ```
 
-The image needs the submission file and an accompanying shell script, both of which are stored in Secret `step1-sub` endoded with base64.
-Also, in order to communicate to HTCondor `kinit` needs to be executed, to which the password is supplied from Secret `kinit-secret`.
+The image needs the submission file and an accompanying shell script,
+both of which are stored in Secret `step1-sub` encoded with base64.
+Also, in order to communicate to HTCondor `kinit` needs to be executed,
+to which the password is supplied from Secret `kinit-secret`.
 
 The previously made `gitlab-registry` Secret is used in
 
@@ -118,4 +121,5 @@ Also, the commands executed in the container are important
           "]
 ```
 
-After creating this pod we can see job that was submitted with `condor_q`. To inspect the HTCondor output logs we can exec into the pod and look for them in the `/scratch` directory.
+After creating this pod we can see the job that was submitted with `condor_q`. To inspect the HTCondor output logs we can
+`kubectl exec` into the pod and look for them in the `/scratch` directory.
